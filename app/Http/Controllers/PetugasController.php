@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guru;
+use App\Models\Parents;
 use App\Models\SchoolClass;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,9 +18,9 @@ class PetugasController extends Controller
     {
         return view('dashboard.petugas.index', [
             'kelas' => SchoolClass::count(),
-            'guru' => User::where('role', 'guru')->count(),
-            'siswa' => User::where('role', 'siswa')->count(),
-            'orangtua' => User::where('role', 'orang_tua')->count(),
+            'guru' => Guru::count(),
+            'siswa' => Student::count(),
+            'orangtua' => Parents::count(),
             // Tambahkan statistik lain sesuai kebutuhan
         ]);
     }

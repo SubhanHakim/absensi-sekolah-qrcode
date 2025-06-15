@@ -10,6 +10,7 @@ class Attendance extends Model
         'student_id',
         'user_id',
         'tanggal',
+        'school_class_id',
         'status',
         'keterangan',
     ];

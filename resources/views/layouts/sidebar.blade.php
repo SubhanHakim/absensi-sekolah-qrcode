@@ -26,21 +26,21 @@
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/school_classes*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="/dashboard/school_classes">
-                    <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Data Kelas</span>
+                    <iconify-icon icon="mdi:school" class="ps-2 text-2xl"></iconify-icon> <span>Data Kelas</span>
                 </a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/gurus*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="/dashboard/gurus">
-                    <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Data Guru</span>
+                    <iconify-icon icon="mdi:account-tie" class="ps-2 text-2xl"></iconify-icon> <span>Data Guru</span>
                 </a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/students*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="/dashboard/students">
-                    <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Data Siswa</span>
+                    <iconify-icon icon="mdi:account-school" class="ps-2 text-2xl"></iconify-icon> <span>Data Siswa</span>
                 </a>
             </li>
 
@@ -48,7 +48,15 @@
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/orangtuas*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="/dashboard/orangtuas">
-                    <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Data Orang Tua</span>
+                    <iconify-icon icon="mdi:account-supervisor" class="ps-2 text-2xl"></iconify-icon> <span>Data Orang Tua</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
+        {{ request()->is('dashboard/accounts*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="/dashboard/accounts">
+                    <i class="ti ti-user-cog ps-2 text-2xl"></i> <span>Manajemen Akun</span>
                 </a>
             </li>
 

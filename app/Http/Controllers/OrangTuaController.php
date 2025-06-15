@@ -38,6 +38,7 @@ class OrangTuaController extends Controller
     public function edit(Parents $orangtua)
     {
         $students = Student::all();
+        
         return view('parents.edit', compact('orangtua', 'students'));
     }
 
@@ -59,48 +60,49 @@ class OrangTuaController extends Controller
         return redirect()->route('parents.index')->with('success', 'Orang Tua berhasil dihapus.');
     }
 
-// public function import(Request $request)
-// {
-//     $request->validate([
-//         'csv_file' => 'required|mimes:csv,txt'
-//     ]);
+public function import(Request $request)
+{
+    $request->validate([
+        'csv_file' => 'required|mimes:csv,txt'
+    ]);
 
-//     $file = $request->file('csv_file');
-//     $handle = fopen($file, 'r');
-//     $header = fgetcsv($handle);
+    $file = $request->file('csv_file');
+    $handle = fopen($file, 'r');
+    $header = fgetcsv($handle);
 
-//     while (($row = fgetcsv($handle)) !== false) {
-//         $data = array_combine($header, $row);
+    while (($row = fgetcsv($handle)) !== false) {
+        $data = array_combine($header, $row);
 
-//         // 1. Cari/buat kelas
-//         $schoolClass = SchoolClass::firstOrCreate(
-//             [
-//                 'class_name' => $data['kelas'],
-//                 'homeroom_teacher' => $data['homeroom_teacher'],
-//             ]
-//         );
+        // 1. Cari/buat kelas
+        $schoolClass = SchoolClass::firstOrCreate(
+            [
+                'class_name' => $data['kelas'],
+                'homeroom_teacher' => $data['homeroom_teacher'],
+            ]
+        );
 
-//         // 2. Cari/buat siswa
-//         $student = Student::firstOrCreate(
-//             ['nis' => $data['nis']],
-//             [
-//                 'user_id' => null,
-//                 'school_class_id' => $schoolClass->id,
-//                 'nis' => $data['nis'],
-//                 'kelas' => $data['kelas'],
-//                 'qr_code' => null,
-//             ]
-//         );
+        // 2. Cari/buat siswa
+        $student = Student::firstOrCreate(
+            ['nis' => $data['nis']],
+            [
+                'user_id' => null,
+                'school_class_id' => $schoolClass->id,
+                'nis' => $data['nis'],
+                'kelas' => $data['kelas'],
+                'qr_code' => null,
+            ]
+        );
 
-//         // 3. Buat orang tua
-//         Parents::create([
-//             'nama' => $data['nama_orang_tua'],
-//             'no_hp' => $data['no_hp_orang_tua'],
-//             'student_id' => $student->id,
-//         ]);
-//     }
-//     fclose($handle);
+        // 3. Buat orang tua
+        Parents::create([
+            'nama' => $data['nama_orang_tua'],
+            'no_hp' => $data['no_hp_orang_tua'],
+            'student_id' => $student->id,
+        ]);
+    }
+    fclose($handle);
 
-//     return redirect()->route('parents.index')->with('success', 'Import data berhasil!');
-// }
+    return redirect()->route('parents.index')->with('success', 'Import data berhasil!');
+ }
+
 }

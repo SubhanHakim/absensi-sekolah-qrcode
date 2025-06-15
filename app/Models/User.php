@@ -24,6 +24,16 @@ class User extends Authenticatable
         'role', // Added role attribute
     ];
 
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function guru()
+{
+    return $this->hasOne(Guru::class, 'user_id');
+}
+
     /**
      * The attributes that should be hidden for serialization.
      *

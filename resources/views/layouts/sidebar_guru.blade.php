@@ -24,15 +24,15 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/tagihan*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="/dashboard/tagihan">
+        {{ request()->is('guru/scan-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="guru/scan-absen">
                     <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Siswa Per Kelas</span>
                 </a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/tagihan*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="/dashboard/tagihan">
+        {{ request()->is('guru/rekap-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="guru/rekap-absen">
                     <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Absensi Siswa</span>
                 </a>
             </li>

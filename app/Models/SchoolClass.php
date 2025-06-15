@@ -14,6 +14,11 @@ class SchoolClass extends Model
 
     public function students()
     {
-        return $this->hasMany(Student::class, 'class_id');
+        return $this->hasMany(Student::class, 'school_class_id');
+    }
+
+    public function walikelas()
+    {
+        return $this->belongsTo(Guru::class, 'homeroom_teacher');
     }
 }

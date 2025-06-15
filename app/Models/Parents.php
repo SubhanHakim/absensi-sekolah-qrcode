@@ -9,9 +9,9 @@ class Parents extends Model
     protected $fillable = [
         'nama',
         'email',
-        'user_id',
         'no_hp',
         'student_id',
+        'user_id',
     ];
 
     public function user()
