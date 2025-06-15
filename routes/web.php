@@ -7,49 +7,47 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\SiswaController;
-use GuruController as GlobalGuruController;
 use Illuminate\Support\Facades\Route;
 
+// Halaman login (root)
 Route::get('/', function () {
     return view('auth.login');
 });
 
+// Dashboard umum (jika ada)
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Profile user
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:guru'])->group(function () {
-    Route::get('/dashboard/guru', [GuruController::class, 'dashboardGuru'])->name('dashboard.guru.index');
-    Route::get('/dashboard/guru/scan-absen', [GuruController::class, 'scanAbsen'])->name('guru.scanAbsen');
-    Route::post('/dashboard/guru/proses-absen', [GuruController::class, 'prosesAbsen'])->name('guru.prosesAbsen');
-    Route::get('/dashboard/guru/download-qr', [GuruController::class, 'downloadQrPdf'])->name('guru.downloadQrPdf');
-    Route::get('/dashboard/siswa/{student}/download-qr', [GuruController::class, 'downloadQr'])->name('guru.downloadQr');
-    Route::get('/dashboard/guru/rekap-absen', [GuruController::class, 'rekapAbsensiHariIni'])->name('guru.rekapAbsen');
-    
+// ===================== GURU =====================
+Route::middleware(['auth', 'role:guru'])->prefix('dashboard')->group(function () {
+    Route::get('guru', [GuruController::class, 'dashboardGuru'])->name('dashboard.guru.index');
+    Route::get('guru/scan-absen', [GuruController::class, 'scanAbsen'])->name('guru.scanAbsen');
+    Route::post('guru/proses-absen', [GuruController::class, 'prosesAbsen'])->name('guru.prosesAbsen');
+    Route::get('guru/download-qr', [GuruController::class, 'downloadQrPdf'])->name('guru.downloadQrPdf');
+    Route::get('guru/{student}/download-qr', [GuruController::class, 'downloadQr'])->name('guru.downloadQr');
+    Route::get('guru/rekap-absen', [GuruController::class, 'rekapAbsensiHariIni'])->name('guru.rekapAbsen');
     // route lain khusus guru
 });
 
-Route::middleware(['auth', 'role:siswa'])->group(function () {
-    Route::get('/dashboard/siswa', [SiswaController::class, 'dashboardSiswa'])->name('dashboard.siswa.index');
-    // route lain khusus siswa
+// ===================== ORANG TUA =====================
+Route::middleware(['auth', 'role:orang_tua'])->prefix('dashboard')->group(function () {
+    Route::get('orangtua', [OrangTuaController::class, 'dashboardOrtu'])->name('dashboard.orangtua.index');
+    Route::get('orangtua/rekap-absensi', [OrangTuaController::class, 'rekapAbsensi'])->name('dashboard.orangtua.rekap-absensi');
+    Route::get('orangtua/riwayat-absensi', [OrangTuaController::class, 'riwayatAbsensi'])->name('dashboard.orangtua.riwayat-absensi');
+    Route::get('orangtua/riwayat-absensi/pdf', [OrangTuaController::class, 'riwayatAbsensiPdf'])->name('dashboard.orangtua.riwayat-absensi.pdf');
 });
 
-Route::middleware(['auth', 'role:orang_tua'])->group(function () {
-    Route::get('/dashboard/orangtua', [OrangTuaController::class, 'index']);
-});
-
-Route::middleware(['auth', 'role:petugas'])->group(function () {
-    Route::get('/dashboard/petugas', [PetugasController::class, 'index']);
-    // route lain khusus petugas
-});
-
+// ===================== PETUGAS =====================
 Route::middleware(['auth', 'role:petugas'])->prefix('dashboard')->group(function () {
+    Route::get('petugas', [PetugasController::class, 'index'])->name('dashboard.petugas.index');
     Route::resource('school_classes', SchoolClassController::class);
     Route::resource('gurus', GuruController::class);
     Route::resource('students', SiswaController::class);
@@ -60,7 +58,9 @@ Route::middleware(['auth', 'role:petugas'])->prefix('dashboard')->group(function
     Route::post('accounts/guru/{guru}', [AccountManagementController::class, 'createGuru'])->name('accounts.createGuru');
     Route::post('accounts/siswa/{student}', [AccountManagementController::class, 'createSiswa'])->name('accounts.createSiswa');
     Route::post('accounts/orangtua/{parent}', [AccountManagementController::class, 'createParent'])->name('accounts.createParent');
+
+    // Import data orang tua (jika hanya petugas yang boleh)
+    Route::post('orangtuas/import', [OrangTuaController::class, 'import'])->name('parents.import');
 });
 
-Route::post('dashboard/orangtuas/import', [OrangTuaController::class, 'import'])->name('parents.import');
 require __DIR__ . '/auth.php';

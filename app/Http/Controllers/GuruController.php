@@ -8,6 +8,10 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class GuruController extends Controller
 {
@@ -37,6 +41,16 @@ class GuruController extends Controller
         $student = Student::where('qr_code', $kode)->first();
 
         if ($student) {
+            // Cek apakah sudah absen hari ini
+            $sudahAbsen = Attendance::where('student_id', $student->id)
+                ->where('tanggal', now()->toDateString())
+                ->exists();
+
+            if ($sudahAbsen) {
+                return back()->with('error', 'Siswa sudah absen hari ini.');
+            }
+
+            // Simpan absensi
             Attendance::create([
                 'student_id' => $student->id,
                 'user_id' => Auth::id(),
@@ -45,8 +59,30 @@ class GuruController extends Controller
                 'status' => 'hadir',
                 'keterangan' => null,
             ]);
-            return back()->with('success', 'Absensi berhasil untuk ' . $student->nama);
+
+            $parent = $student->parent;
+            if ($parent && $parent->no_hp) {
+                $no_hp = $parent->no_hp;
+                $pesan = "Anak Anda, {$student->nama}, telah melakukan absensi dan statusnya: HADIR pada " . now()->format('d-m-Y') . ".";
+
+                try {
+                    $response = \Illuminate\Support\Facades\Http::withHeaders([
+                        'Authorization' => env('FONNTE_API_KEY')
+                    ])->asForm()->post('https://api.fonnte.com/send', [
+                        'target' => $no_hp,
+                        'message' => $pesan,
+                    ]);
+                    // Optional: cek response jika perlu
+                    // $result = $response->json();
+                } catch (\Exception $e) {
+                    // Optional: log error atau tampilkan pesan
+                    Log::error('Gagal kirim WA: ' . $e->getMessage());
+                }
+            }
+
+            return back()->with('success', 'Absensi berhasil untuk ' . $student->nama . '. Notifikasi dikirim ke orang tua.');
         }
+
         return back()->with('error', 'Siswa tidak ditemukan!');
     }
 
@@ -60,32 +96,52 @@ class GuruController extends Controller
         return $pdf->download('qr_code_kelas_' . $kelas->class_name . '.pdf');
     }
 
-    public function downloadQr(Student $student)
+    public function rekapAbsensiHariIni(Request $request)
     {
         $guru = Auth::user()->guru;
-        // Pastikan siswa yang diakses memang dari kelas yang diampu guru
-        if ($student->school_class_id !== $guru->school_class_id) {
-            abort(403, 'Anda tidak berhak mengakses QR code siswa ini.');
+        $kelas = $guru?->kelas;
+        $students = $kelas ? $kelas->students : collect();
+
+        // Ambil filter dari request, default: hari ini & harian
+        $tanggal = $request->input('tanggal', now()->toDateString());
+        $periode = $request->input('periode', 'harian');
+
+        $query = Attendance::whereIn('student_id', $students->pluck('id'));
+
+        if ($periode == 'mingguan') {
+            $start = Carbon::parse($tanggal)->startOfWeek();
+            $end = Carbon::parse($tanggal)->endOfWeek();
+            $query->whereBetween('tanggal', [$start, $end]);
+        } elseif ($periode == 'bulanan') {
+            $start = Carbon::parse($tanggal)->startOfMonth();
+            $end = Carbon::parse($tanggal)->endOfMonth();
+            $query->whereBetween('tanggal', [$start, $end]);
+        } else {
+            $query->where('tanggal', $tanggal);
         }
 
-        $pdf = Pdf::loadView('students.qr-pdf', compact('student'));
-        return $pdf->download('qr_code_' . $student->nama . '.pdf');
+        // Group absensi by student_id
+        $absensi = $query->get()->groupBy('student_id');
+
+        return view('dashboard.guru.rekap-absen', [
+            'students' => $students,
+            'absensi' => $absensi,
+            'kelas' => $kelas,
+            'tanggal' => $tanggal,
+            'periode' => $periode,
+        ]);
     }
 
-public function rekapAbsensiHariIni()
-{
-    $guru = Auth::user()->guru;
-    $kelas = $guru?->kelas;
-    $students = $kelas ? $kelas->students : collect();
+    public function downloadQr($id)
+    {
+        $student = Student::findOrFail($id);
+        $qr = QrCode::format('svg')->size(300)->generate($student->qr_code);
 
-    $tanggal = now()->toDateString();
-    $absenHariIni = Attendance::where('tanggal', $tanggal)
-        ->whereIn('student_id', $students->pluck('id'))
-        ->get()
-        ->keyBy('student_id');
-
-    return view('dashboard.guru.rekap-absen', compact('students', 'absenHariIni', 'kelas', 'tanggal'));
-}
+        return Response::make($qr, 200, [
+            'Content-Type' => 'image/svg+xml',
+            'Content-Disposition' => 'attachment; filename="qr-' . $student->nis . '.svg"',
+        ]);
+    }
 
 
 

@@ -30,9 +30,14 @@ class User extends Authenticatable
     }
 
     public function guru()
-{
-    return $this->hasOne(Guru::class, 'user_id');
-}
+    {
+        return $this->hasOne(Guru::class, 'user_id');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne(Parents::class, 'user_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

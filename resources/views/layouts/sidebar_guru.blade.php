@@ -2,7 +2,7 @@
     <h1 class="text-3xl uppercase font-semibold">Guru</h1>
 </div>
 <div class="scroll-sidebar" data-simplebar="">
-    <nav class=" w-full flex flex-col sidebar-nav px-4 mt-5">
+    <nav class="w-full flex flex-col sidebar-nav px-4 mt-5">
         <ul id="sidebarnav" class="text-gray-600 text-sm">
             <li class="text-xs font-bold pb-[5px]">
                 <i class="ti ti-dots nav-small-cap-icon text-lg hidden text-center"></i>
@@ -11,8 +11,8 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="/dashboard">
+                    {{ request()->is('dashboard/guru') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/guru') }}">
                     <i class="ti ti-layout-dashboard ps-2 text-2xl"></i> <span>Dashboard</span>
                 </a>
             </li>
@@ -24,16 +24,16 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('guru/scan-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="guru/scan-absen">
-                    <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Siswa Per Kelas</span>
+                    {{ request()->is('dashboard/guru/scan-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/guru/scan-absen') }}">
+                    <i class="ti ti-qrcode ps-2 text-2xl"></i> <span>Absensi Siswa (Scan)</span>
                 </a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('guru/rekap-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="guru/rekap-absen">
-                    <i class="ti ti-credit-card ps-2 text-2xl"></i> <span>Absensi Siswa</span>
+                    {{ request()->is('dashboard/guru/rekap-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/guru/rekap-absen') }}">
+                    <i class="ti ti-clipboard-list ps-2 text-2xl"></i> <span>Rekap Absen</span>
                 </a>
             </li>
 
@@ -44,8 +44,8 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/testimoni*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="/dashboard/testimoni">
+                    {{ request()->is('dashboard/testimoni*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/testimoni') }}">
                     <i class="ti ti-message ps-2 text-2xl"></i> <span>Absensi</span>
                 </a>
             </li>
