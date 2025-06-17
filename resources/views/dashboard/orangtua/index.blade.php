@@ -1,54 +1,127 @@
 {{-- filepath: resources/views/dashboard/orangtua/index.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl flex items-center gap-2">
-            <i class="ti ti-users text-2xl text-blue-600"></i>
-            Dashboard Orang Tua
-        </h2>
+        <nav class="w-full flex items-center justify-between" aria-label="Global">
+            <div>
+                <h2 class="font-semibold text-xl">Dashboard Orangtua</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                @include('header-components.dd-profile')
+            </div>
+        </nav>
     </x-slot>
 
-    <div
-        class="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-br from-blue-100 to-blue-200 py-10">
-        <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-blue-200 p-8">
-            <h3 class="text-lg font-bold text-blue-700 mb-6 flex items-center gap-2">
-                <i class="ti ti-user-circle text-xl text-blue-500"></i>
-                Ringkasan Profil Anak
-            </h3>
-            <div class="flex items-center gap-6 mb-8">
-                @if (!empty($student->foto_url))
-                    <img src="{{ $student->foto_url }}" alt="Foto Anak"
-                        class="w-24 h-24 rounded-full border-4 border-blue-300 object-cover shadow">
-                @else
-                    {{-- Avatar Initial --}}
-                    @php
-                        $initial = strtoupper(substr($student->nama ?? 'A', 0, 1));
-                    @endphp
-                    <div
-                        class="w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-300 text-blue-700 text-4xl font-bold shadow select-none">
-                        {{ $initial }}
-                    </div>
-                @endif
-                <div class="grid grid-cols-3 gap-y-2 gap-x-4">
-                    <div class="text-blue-600 font-semibold text-right">Nama :</div>
-                    <div class="col-span-2 text-gray-700">{{ $student->nama }}</div>
-
-                    <div class="text-blue-600 font-semibold text-right">NIS :</div>
-                    <div class="col-span-2 text-gray-700">{{ $student->nis }}</div>
-
-                    <div class="text-blue-600 font-semibold text-right">Kelas :</div>
-                    <div class="col-span-2 text-gray-700">{{ $student->kelas->class_name ?? '-' }}</div>
+    <div class="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-br from-blue-100 to-blue-200 py-8">
+        <!-- Welcome Banner -->
+        <div class="w-full max-w-4xl bg-gradient-to-r from-blue-600 to-blue-400 text-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex items-center gap-4">
+                <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                    <i class="ti ti-hand-wave text-3xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold">Selamat Datang, {{ auth()->user()->name }}!</h3>
+                    <p class="text-blue-50">Pantau perkembangan dan kehadiran anak Anda dengan mudah</p>
                 </div>
             </div>
-            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 shadow-inner">
-                <h4 class="font-semibold text-blue-600 mb-3 flex items-center gap-2">
-                    <i class="ti ti-user-star text-lg text-blue-500"></i>
-                    Info Wali Kelas
-                </h4>
-                <div class="flex flex-col gap-1">
-                    <p class="text-gray-700"><span class="font-semibold text-blue-600">Nama:</span>
-                        {{ $student->kelas->walikelas->nama ?? '-' }}</p>
-                    <p class="text-gray-700"><span class="font-semibold text-blue-600">Kontak:</span>
-                        {{ $student->kelas->walikelas->email ?? '-' }}</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="w-full max-w-4xl flex flex-col md:flex-row gap-6">
+            <!-- Profile Card -->
+            <div class="md:w-2/3 bg-white rounded-2xl shadow-xl border border-blue-200 p-6">
+                <h3 class="text-lg font-bold text-blue-700 mb-4 flex items-center gap-2">
+                    <i class="ti ti-user-circle text-xl text-blue-500"></i>
+                    Profil Siswa
+                </h3>
+                <div class="flex flex-col sm:flex-row items-center gap-6 mb-6">
+                    @if (!empty($student->foto_url))
+                        <img src="{{ $student->foto_url }}" alt="Foto Anak"
+                            class="w-28 h-28 rounded-full border-4 border-blue-300 object-cover shadow">
+                    @else
+                        {{-- Avatar Initial --}}
+                        @php
+                            $initial = strtoupper(substr($student->nama ?? 'A', 0, 1));
+                        @endphp
+                        <div
+                            class="w-28 h-28 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-300 text-blue-700 text-4xl font-bold shadow select-none">
+                            {{ $initial }}
+                        </div>
+                    @endif
+                    <div class="grid grid-cols-[100px_1fr] gap-y-2 gap-x-4">
+                        <div class="text-blue-600 font-semibold text-right">Nama :</div>
+                        <div class="text-gray-700 font-medium">{{ $student->nama }}</div>
+
+                        <div class="text-blue-600 font-semibold text-right">NIS :</div>
+                        <div class="text-gray-700 font-medium">{{ $student->nis }}</div>
+
+                        <div class="text-blue-600 font-semibold text-right">Kelas :</div>
+                        <div class="text-gray-700 font-medium">{{ $student->kelas->class_name ?? '-' }}</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 shadow-inner">
+                    <h4 class="font-semibold text-blue-600 mb-3 flex items-center gap-2">
+                        <i class="ti ti-user-star text-lg text-blue-500"></i>
+                        Info Wali Kelas
+                    </h4>
+                    <div class="grid grid-cols-[100px_1fr] gap-y-2 gap-x-4">
+                        <div class="text-blue-600 font-semibold text-right">Nama :</div>
+                        <div class="text-gray-700">{{ $student->kelas->walikelas->nama ?? '-' }}</div>
+                        
+                        <div class="text-blue-600 font-semibold text-right">Kontak :</div>
+                        <div class="text-gray-700">{{ $student->kelas->walikelas->email ?? '-' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="md:w-1/3 flex flex-col gap-4">
+                <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-6">
+                    <h3 class="text-lg font-bold text-blue-700 mb-4">Menu Cepat</h3>
+                    <div class="flex flex-col gap-3">
+                        <a href="{{ url('dashboard/orangtua/rekap-absensi') }}" class="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                            <div class="bg-blue-500 text-white p-2 rounded-lg">
+                                <i class="ti ti-calendar-stats text-xl"></i>
+                            </div>
+                            <span class="font-medium">Rekap Absensi</span>
+                        </a>
+                        
+                        <a href="{{ url('dashboard/orangtua/riwayat-absensi') }}" class="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                            <div class="bg-blue-500 text-white p-2 rounded-lg">
+                                <i class="ti ti-clipboard-list text-xl"></i>
+                            </div>
+                            <span class="font-medium">Riwayat Absensi</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Status Hari Ini -->
+                @php
+                    $today = now()->toDateString();
+                    $statusHariIni = isset($student) ? \App\Models\Attendance::where('student_id', $student->id)
+                        ->where('tanggal', $today)
+                        ->first() : null;
+                @endphp
+                
+                <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-6">
+                    <h3 class="text-lg font-bold text-blue-700 mb-4">Status Hari Ini</h3>
+                    @if($statusHariIni)
+                        <div class="bg-green-100 text-green-700 p-4 rounded-lg flex items-center gap-3">
+                            <i class="ti ti-check-circle text-3xl"></i>
+                            <div>
+                                <p class="font-bold">Sudah Absen</p>
+                                <p class="text-sm">Status: {{ ucfirst($statusHariIni->status) }}</p>
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-yellow-100 text-yellow-700 p-4 rounded-lg flex items-center gap-3">
+                            <i class="ti ti-alert-circle text-3xl"></i>
+                            <div>
+                                <p class="font-bold">Belum Absen</p>
+                                <p class="text-sm">Atau data belum diperbarui</p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

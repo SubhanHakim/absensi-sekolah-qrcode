@@ -1,10 +1,15 @@
 {{-- filepath: resources/views/dashboard/orangtua/rekap-absensi.blade.php --}}
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl flex items-center gap-2">
+     <x-slot name="header">
+        <nav class="w-full flex items-center justify-between" aria-label="Global">
+                    <h2 class="font-semibold text-xl flex items-center gap-2">
             <i class="ti ti-calendar-stats text-2xl text-blue-600"></i>
             Rekapitulasi Absensi Anak
         </h2>
+            <div class="flex items-center gap-4">
+                @include('header-components.dd-profile')
+            </div>
+        </nav>
     </x-slot>
 
     <div class="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-br from-blue-50 to-blue-100 py-8">

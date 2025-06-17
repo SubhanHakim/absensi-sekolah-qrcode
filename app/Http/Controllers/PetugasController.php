@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Guru;
 use App\Models\Parents;
 use App\Models\SchoolClass;
@@ -16,15 +17,23 @@ class PetugasController extends Controller
      */
     public function index()
     {
-        return view('dashboard.petugas.index', [
-            'kelas' => SchoolClass::count(),
-            'guru' => Guru::count(),
-            'siswa' => Student::count(),
-            'orangtua' => Parents::count(),
-            // Tambahkan statistik lain sesuai kebutuhan
-        ]);
-    }
+        $kelas = SchoolClass::count();
+        $guru = Guru::count();
+        $siswa = Student::count();
+        $orangtua = Parents::count();
 
+        $recentActivities = ActivityLog::orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('dashboard.petugas.index', compact(
+            'kelas',
+            'guru',
+            'siswa',
+            'orangtua',
+            'recentActivities'
+        ));
+    }
     /**
      * Show the form for creating a new resource.
      */
