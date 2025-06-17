@@ -1,4 +1,7 @@
 <div class="p-4 text-center">
+    <div class="flex justify-center mb-3">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Sekolah" class="h-14 w-auto">
+    </div>
     <h1 class="text-3xl uppercase font-semibold">Orang Tua</h1>
 </div>
 <div class="scroll-sidebar" data-simplebar="">
@@ -34,6 +37,13 @@
                     {{ request()->is('dashboard/orangtua/riwayat-absensi*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="{{ url('dashboard/orangtua/riwayat-absensi') }}">
                     <i class="ti ti-clipboard-list ps-2 text-2xl"></i> <span>Riwayat Absensi</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
+        {{ request()->is('dashboard/orangtua/leave-requests*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/orangtua/leave-requests') }}">
+                    <i class="ti ti-medical-cross ps-2 text-2xl"></i> <span>Izin/Sakit</span>
                 </a>
             </li>
         </ul>

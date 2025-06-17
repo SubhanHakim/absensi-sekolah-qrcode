@@ -1,4 +1,7 @@
 <div class="p-4 text-center">
+    <div class="flex justify-center mb-3">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Sekolah" class="h-14 w-auto">
+    </div>
     <h1 class="text-3xl uppercase font-semibold">Guru</h1>
 </div>
 <div class="scroll-sidebar" data-simplebar="">
@@ -44,9 +47,22 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-                    {{ request()->is('dashboard/testimoni*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="{{ url('dashboard/testimoni') }}">
-                    <i class="ti ti-message ps-2 text-2xl"></i> <span>Absensi</span>
+        {{ request()->is('dashboard/guru/leave-requests*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/guru/leave-requests') }}">
+                    <i class="ti ti-medical-cross ps-2 text-2xl"></i> <span>Permintaan Izin</span>
+                    @php
+                        $pendingCount = \App\Models\LeaveRequest::whereHas('student', function ($q) {
+                            $q->where('school_class_id', auth()->user()->guru->kelas->id ?? 0);
+                        })
+                            ->where('status', 'pending')
+                            ->count();
+                    @endphp
+                    @if ($pendingCount > 0)
+                        <span
+                            class="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center ml-1">
+                            {{ $pendingCount }}
+                        </span>
+                    @endif
                 </a>
             </li>
         </ul>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountManagementController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\OrangTuaController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ProfileController;
@@ -34,6 +35,11 @@ Route::middleware(['auth', 'role:guru'])->prefix('dashboard')->group(function ()
     Route::get('guru/download-qr', [GuruController::class, 'downloadQrPdf'])->name('guru.downloadQrPdf');
     Route::get('guru/{student}/download-qr', [GuruController::class, 'downloadQr'])->name('guru.downloadQr');
     Route::get('guru/rekap-absen', [GuruController::class, 'rekapAbsensiHariIni'])->name('guru.rekapAbsen');
+
+    Route::get('guru/leave-requests', [LeaveRequestController::class, 'indexForTeacher'])
+         ->name('dashboard.guru.leave-request.index');
+    Route::patch('guru/leave-requests/{leaveRequest}', [LeaveRequestController::class, 'approve'])
+         ->name('dashboard.guru.leave-request.approve');
     // route lain khusus guru
 });
 
@@ -43,6 +49,13 @@ Route::middleware(['auth', 'role:orang_tua'])->prefix('dashboard')->group(functi
     Route::get('orangtua/rekap-absensi', [OrangTuaController::class, 'rekapAbsensi'])->name('dashboard.orangtua.rekap-absensi');
     Route::get('orangtua/riwayat-absensi', [OrangTuaController::class, 'riwayatAbsensi'])->name('dashboard.orangtua.riwayat-absensi');
     Route::get('orangtua/riwayat-absensi/pdf', [OrangTuaController::class, 'riwayatAbsensiPdf'])->name('dashboard.orangtua.riwayat-absensi.pdf');
+
+    Route::get('orangtua/leave-requests', [LeaveRequestController::class, 'index'])
+        ->name('dashboard.orangtua.leave-request.index');
+    Route::get('orangtua/leave-requests/create', [LeaveRequestController::class, 'create'])
+        ->name('dashboard.orangtua.leave-request.create');
+    Route::post('orangtua/leave-requests', [LeaveRequestController::class, 'store'])
+        ->name('dashboard.orangtua.leave-request.store');
 });
 
 // ===================== PETUGAS =====================
