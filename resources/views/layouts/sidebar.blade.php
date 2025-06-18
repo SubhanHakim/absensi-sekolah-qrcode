@@ -2,7 +2,7 @@
     <div class="flex justify-center mb-3">
         <img src="{{ asset('images/logo.png') }}" alt="Logo Sekolah" class="h-14 w-auto">
     </div>
-    <h1 class="text-3xl uppercase font-semibold">Petugas</h1>
+    <h1 class="text-3xl uppercase font-semibold">Wali Kelas</h1>
 </div>
 <div class="scroll-sidebar" data-simplebar="">
     <nav class=" w-full flex flex-col sidebar-nav px-4 mt-5">

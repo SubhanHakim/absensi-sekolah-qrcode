@@ -13,9 +13,35 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Background Logo Style -->
+        <style>
+            .bg-logo {
+                background-image: url("{{ asset('images/logo.png') }}");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                opacity: 0.05; /* Reduced opacity so content is still visible */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 0;
+            }
+            
+            .guest-content {
+                position: relative;
+                z-index: 1;
+            }
+        </style>
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <!-- Background Logo Element -->
+        <div class="bg-logo"></div>
+        
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 guest-content">
             
             {{-- <div>
                 <a href="/">

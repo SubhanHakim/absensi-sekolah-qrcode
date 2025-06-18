@@ -15,14 +15,36 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 
-
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/css/theme.css', 'resources/js/app.js', 'resources/js/sidebarmenu.js', 'resources/css/sidebar.css', 'resources/css/reboot.css', 'resources/js/app.js'])
 
+    <style>
+        .bg-logo {
+            background-image: url("{{ asset('images/logo.png') }}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.05; /* Reduced opacity so content is still visible */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        main, header, footer, .app-content, #main-wrapper, .page-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
 
 <body class="bg-surface font-sans antialiased">
+    <!-- Background Logo Element -->
+    <div class="bg-logo"></div>
+    
     <main>
         <div id="main-wrapper" class="flex p-5 xl:pr-0">
             {{-- Sidebar --}}
