@@ -2,7 +2,7 @@
     <x-slot name="header">
         <nav class="w-full flex items-center justify-between" aria-label="Global">
             <div>
-                <h2 class="font-semibold text-xl">Dashboard Petugas</h2>
+                <h2 class="font-semibold text-xl">Dashboard Wali Kelas</h2>
             </div>
             <div class="flex items-center gap-4">
                 @include('header-components.dd-profile')
