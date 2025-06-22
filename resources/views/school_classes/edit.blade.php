@@ -34,16 +34,6 @@
                 </div>
                 <div class="mb-6">
                     <label class="block mb-1 font-medium text-gray-700">Wali Kelas</label>
-                    <select name="homeroom_teacher"
-                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
-                        <option value="">Pilih Guru</option>
-                        @foreach ($gurus as $guru)
-                            <option value="{{ $guru->id }}"
-                                {{ $school_class->homeroom_teacher == $guru->id ? 'selected' : '' }}>
-                                {{ $guru->nama }} ({{ $guru->nip }})
-                            </option>
-                        @endforeach
-                    </select>
                 </div>
                 <button type="submit"
                     class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Update</button>

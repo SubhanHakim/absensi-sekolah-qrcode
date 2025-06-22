@@ -6,6 +6,7 @@ use App\Models\LeaveRequest;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class LeaveRequestController extends Controller
@@ -15,7 +16,7 @@ class LeaveRequestController extends Controller
     {
         $parent = Auth::user()->parent;
         $student = $parent->student;
-        
+
         return view('dashboard.orangtua.leave-request.create', compact('student'));
     }
 
@@ -50,7 +51,7 @@ class LeaveRequestController extends Controller
         ]);
 
         return redirect()->route('dashboard.orangtua.leave-request.index')
-                         ->with('success', 'Pengajuan izin berhasil dikirim');
+            ->with('success', 'Pengajuan izin berhasil dikirim');
     }
 
     // Daftar pengajuan izin untuk orang tua
@@ -58,8 +59,8 @@ class LeaveRequestController extends Controller
     {
         $parent = Auth::user()->parent;
         $leaveRequests = LeaveRequest::where('parent_id', $parent->id)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('dashboard.orangtua.leave-request.index', compact('leaveRequests'));
     }
@@ -69,12 +70,12 @@ class LeaveRequestController extends Controller
     {
         $guru = Auth::user()->guru;
         $kelas = $guru->kelas;
-        
-        $leaveRequests = LeaveRequest::whereHas('student', function($q) use ($kelas) {
-                            $q->where('school_class_id', $kelas->id);
-                        })
-                        ->orderBy('created_at', 'desc')
-                        ->get();
+
+        $leaveRequests = LeaveRequest::whereHas('student', function ($q) use ($kelas) {
+            $q->where('school_class_id', $kelas->id);
+        })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('dashboard.guru.leave-request.index', compact('leaveRequests'));
     }
@@ -98,13 +99,13 @@ class LeaveRequestController extends Controller
             $fromDate = $leaveRequest->from_date;
             $toDate = $leaveRequest->to_date;
             $currentDate = clone $fromDate;
-            
+
             while ($currentDate <= $toDate) {
                 if ($currentDate->dayOfWeek !== 0 && $currentDate->dayOfWeek !== 6) {
                     $existingAttendance = Attendance::where('student_id', $leaveRequest->student_id)
-                                                    ->where('tanggal', $currentDate->format('Y-m-d'))
-                                                    ->first();
-                    
+                        ->where('tanggal', $currentDate->format('Y-m-d'))
+                        ->first();
+
                     if (!$existingAttendance) {
                         Attendance::create([
                             'student_id' => $leaveRequest->student_id,
@@ -116,12 +117,99 @@ class LeaveRequestController extends Controller
                         ]);
                     }
                 }
-                
+
                 $currentDate->addDay();
             }
         }
 
         return redirect()->route('dashboard.guru.leave-request.index')
-                         ->with('success', 'Pengajuan izin berhasil diperbarui');
+            ->with('success', 'Pengajuan izin berhasil diperbarui');
     }
+
+    public function indexForPetugas()
+    {
+        // Petugas bisa melihat semua permintaan izin
+        $leaveRequests = LeaveRequest::with(['student', 'student.kelas'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboard.petugas.leave-request.index', compact('leaveRequests'));
+    }
+
+    public function processByPetugas(Request $request, LeaveRequest $leaveRequest)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'notes' => 'nullable|string',
+        ]);
+
+        $leaveRequest->update([
+            'status' => $request->status,
+            'notes' => $request->notes,
+            'approved_by' => Auth::id(),
+            'approved_at' => now(),
+        ]);
+
+        if ($request->status === 'approved') {
+            $fromDate = $leaveRequest->from_date;
+            $toDate = $leaveRequest->to_date;
+            $currentDate = clone $fromDate;
+
+            while ($currentDate <= $toDate) {
+                if ($currentDate->dayOfWeek !== 0 && $currentDate->dayOfWeek !== 6) {
+                    $existingAttendance = Attendance::where('student_id', $leaveRequest->student_id)
+                        ->where('tanggal', $currentDate->format('Y-m-d'))
+                        ->first();
+
+                    if (!$existingAttendance) {
+                        Attendance::create([
+                            'student_id' => $leaveRequest->student_id,
+                            'user_id' => Auth::id(),
+                            'school_class_id' => $leaveRequest->student->school_class_id,
+                            'tanggal' => $currentDate->format('Y-m-d'),
+                            'status' => $leaveRequest->type,
+                            'keterangan' => $leaveRequest->reason,
+                        ]);
+                    }
+                }
+
+                $currentDate->addDay();
+            }
+        }
+
+        return redirect()->route('dashboard.petugas.leave-request.index')
+            ->with('success', 'Pengajuan izin berhasil diperbarui');
+    }
+
+    private function sendNotificationToParent(LeaveRequest $leaveRequest, bool $isApproved)
+{
+    $parent = $leaveRequest->student->parent;
+    
+    if ($parent && $parent->no_hp) {
+        $statusText = $isApproved ? 'DISETUJUI' : 'DITOLAK';
+        $pesan = "Pengajuan " . ucfirst($leaveRequest->type) . " untuk " . $leaveRequest->student->nama . 
+                " pada tanggal " . $leaveRequest->from_date->format('d M Y');
+        
+        if ($leaveRequest->to_date->ne($leaveRequest->from_date)) {
+            $pesan .= " - " . $leaveRequest->to_date->format('d M Y');
+        }
+        
+        $pesan .= " telah " . $statusText;
+        
+        if (!empty($leaveRequest->notes)) {
+            $pesan .= ". Catatan: " . $leaveRequest->notes;
+        }
+        
+        try {
+            \Illuminate\Support\Facades\Http::withHeaders([
+                'Authorization' => env('FONNTE_API_KEY')
+            ])->asForm()->post('https://api.fonnte.com/send', [
+                'target' => $parent->no_hp,
+                'message' => $pesan,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Gagal kirim notifikasi: ' . $e->getMessage());
+        }
+    }
+}
 }

@@ -8,7 +8,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <form action="{{ route('dashboard.orangtua.leave-requests.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('dashboard.orangtua.leave-request.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-4">
                             <label class="block text-gray-700 font-bold mb-2">Siswa:</label>

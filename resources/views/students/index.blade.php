@@ -38,16 +38,25 @@
                         <td class="py-2 px-4 border-b border-gray-200">
                             {{ $student->schoolClass->class_name ?? $student->kelas }}</td>
                         <td class="py-2 px-4 border-b border-gray-200">
-                            {!! QrCode::size(80)->generate($student->qr_code) !!}
+                            <div id="qr-container-{{ $student->id }}" class="flex flex-col items-center">
+                                {!! QrCode::size(100)->generate($student->qr_code) !!}
+                                <a href="#"
+                                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs mt-2 transition flex items-center gap-1"
+                                    onclick="downloadPNG({{ $student->id }}, '{{ $student->nis }}'); return false;">
+                                    <i class="ti ti-download"></i> Download
+                                </a>
+                            </div>
                         </td>
                         <td class="py-2 px-4 border-b border-gray-200 text-center">
                             <a href="{{ route('students.edit', $student) }}"
-                                class="inline-block text-blue-600 hover:underline"><iconify-icon icon="mdi:pencil" width="24" height="24"></iconify-icon></a>
+                                class="inline-block text-blue-600 hover:underline"><iconify-icon icon="mdi:pencil"
+                                    width="24" height="24"></iconify-icon></a>
                             <form action="{{ route('students.destroy', $student) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 ml-2 hover:underline"
-                                    onclick="return confirm('Yakin hapus?')"><iconify-icon icon="mdi:trash" width="24" height="24"></iconify-icon></button>
+                                    onclick="return confirm('Yakin hapus?')"><iconify-icon icon="mdi:trash"
+                                        width="24" height="24"></iconify-icon></button>
                             </form>
                         </td>
                     </tr>
@@ -59,4 +68,35 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        function downloadPNG(studentId, nis) {
+            const container = document.getElementById('qr-container-' + studentId);
+            const svg = container.querySelector('svg');
+            if (svg) {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const svg64 = btoa(unescape(encodeURIComponent(svgData)));
+                const image64 = 'data:image/svg+xml;base64,' + svg64;
+
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    // Set canvas size to 300x300 for bigger PNG
+                    canvas.width = 300;
+                    canvas.height = 300;
+                    const ctx = canvas.getContext('2d');
+                    // Draw SVG image scaled up to 300x300
+                    ctx.drawImage(img, 0, 0, 300, 300);
+                    const pngFile = canvas.toDataURL('image/png');
+                    const a = document.createElement('a');
+                    a.href = pngFile;
+                    a.download = 'qr_code_' + nis + '.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
+                img.src = image64;
+            }
+        }
+    </script>
 </x-app-layout>

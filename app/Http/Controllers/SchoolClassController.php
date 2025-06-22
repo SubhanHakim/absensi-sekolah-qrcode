@@ -23,19 +23,13 @@ class SchoolClassController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'class_name' => 'required|unique:school_classes,class_name',
-            'homeroom_teacher' => 'required|exists:gurus,id',
+            'class_name' => 'required|unique:school_classes,class_name'
         ]);
 
         // Simpan kelas
         $kelas = SchoolClass::create([
             'class_name' => $request->class_name,
-            'homeroom_teacher' => $request->homeroom_teacher,
         ]);
-
-        // Update guru (optional, jika ingin ada school_class_id di guru)
-        Guru::where('id', $request->homeroom_teacher)
-            ->update(['school_class_id' => $kelas->id]);
 
         return redirect()->route('school_classes.index')->with('success', 'Kelas berhasil ditambahkan.');
     }
@@ -50,7 +44,6 @@ class SchoolClassController extends Controller
     {
         $request->validate([
             'class_name' => 'required|unique:school_classes,class_name,' . $school_class->id,
-            'homeroom_teacher' => 'nullable|string',
         ]);
         $school_class->update($request->all());
         return redirect()->route('school_classes.index')->with('success', 'Kelas berhasil diupdate.');

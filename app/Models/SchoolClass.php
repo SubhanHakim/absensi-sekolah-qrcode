@@ -8,7 +8,6 @@ class SchoolClass extends Model
 {
     protected $fillable = [
         'class_name',
-        'homeroom_teacher'
     ];
 
 
@@ -17,8 +16,8 @@ class SchoolClass extends Model
         return $this->hasMany(Student::class, 'school_class_id');
     }
 
-    public function walikelas()
-    {
-        return $this->belongsTo(Guru::class, 'homeroom_teacher');
-    }
+    // public function walikelas()
+    // {
+    //     return $this->belongsTo(Guru::class, 'homeroom_teacher');
+    // }
 }

@@ -8,6 +8,9 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Str;
 
 class SiswaController extends Controller
 {
@@ -73,7 +76,7 @@ class SiswaController extends Controller
     public function edit(Student $student)
     {
         $parent = $student->parent; // ambil data parent dari relasi
-        $schoolClass = SchoolClass::all();  
+        $schoolClass = SchoolClass::all();
 
         return view('students.edit', compact('student', 'parent', 'schoolClass'));
     }
@@ -127,5 +130,49 @@ class SiswaController extends Controller
     {
         $student->delete();
         return redirect()->route('students.index')->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    public function downloadQr($id)
+    {
+        $student = Student::findOrFail($id);
+
+        // Generate QR code sebagai SVG terlebih dahulu
+        $svgQrCode = QrCode::format('svg')->size(300)->generate($student->qr_code);
+
+        // Konversi SVG ke PNG menggunakan GD
+        $tempFile = tempnam(sys_get_temp_dir(), 'qrcode');
+        file_put_contents($tempFile . '.svg', $svgQrCode);
+
+        // Create PNG from SVG using GD
+        $image = imagecreatetruecolor(300, 300);
+        imagefill($image, 0, 0, imagecolorallocate($image, 255, 255, 255));
+
+        // Gambar simple QR code
+        $svgImage = simplexml_load_file($tempFile . '.svg');
+        $paths = $svgImage->xpath('//path');
+
+        foreach ($paths as $path) {
+            // Gambar path ke image
+            $attrs = $path->attributes();
+            if (isset($attrs['d'])) {
+                // Hanya gambar kotak hitam
+                imagefilledrectangle($image, 50, 50, 250, 250, imagecolorallocate($image, 0, 0, 0));
+            }
+        }
+
+        // Simpan ke buffer
+        ob_start();
+        imagepng($image);
+        $pngData = ob_get_clean();
+
+        // Bersihkan resource
+        imagedestroy($image);
+        unlink($tempFile);
+        if (file_exists($tempFile . '.svg')) unlink($tempFile . '.svg');
+
+        return response($pngData, 200, [
+            'Content-Type' => 'image/png',
+            'Content-Disposition' => 'attachment; filename="qr-' . $student->nis . '.png"',
+        ]);
     }
 }

@@ -32,18 +32,33 @@
                     <iconify-icon icon="mdi:school" class="ps-2 text-2xl"></iconify-icon> <span>Data Kelas</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/gurus*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="{{ url('dashboard/gurus') }}">
                     <iconify-icon icon="mdi:account-tie" class="ps-2 text-2xl"></iconify-icon> <span>Data Guru</span>
+                </a>
+            </li> --}}
+            <li class="sidebar-item">
+                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
+        {{ request()->is('dashboard/petugas/scan-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/petugas/scan-absen') }}">
+                    <i class="ti ti-qrcode ps-2 text-2xl"></i> <span>Absensi Siswa (Scan)</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
+        {{ request()->is('dashboard/petugas/rekap-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ url('dashboard/petugas/rekap-absen') }}">
+                    <i class="ti ti-clipboard-list ps-2 text-2xl"></i> <span>Rekap Absen</span>
                 </a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/students*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="{{ url('dashboard/students') }}">
-                    <iconify-icon icon="mdi:account-school" class="ps-2 text-2xl"></iconify-icon> <span>Data Siswa</span>
+                    <iconify-icon icon="mdi:account-school" class="ps-2 text-2xl"></iconify-icon> <span>Data
+                        Siswa</span>
                 </a>
             </li>
 
@@ -51,7 +66,8 @@
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/orangtuas*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="{{ url('dashboard/orangtuas') }}">
-                    <iconify-icon icon="mdi:account-supervisor" class="ps-2 text-2xl"></iconify-icon> <span>Data Orang Tua</span>
+                    <iconify-icon icon="mdi:account-supervisor" class="ps-2 text-2xl"></iconify-icon> <span>Data Orang
+                        Tua</span>
                 </a>
             </li>
 
@@ -62,17 +78,11 @@
                     <i class="ti ti-user-cog ps-2 text-2xl"></i> <span>Manajemen Akun</span>
                 </a>
             </li>
-
-            <li class="text-xs font-bold mb-4 mt-6">
-                <i class="ti ti-dots nav-small-cap-icon text-lg hidden text-center"></i>
-                <span class="text-xs text-gray-400 font-semibold">Rekap & Laporan</span>
-            </li>
-
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/testimoni*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="{{ url('dashboard/testimoni') }}">
-                    <i class="ti ti-message ps-2 text-2xl"></i> <span>Absensi</span>
+{{ request()->is('dashboard/petugas/leave-requests*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    href="{{ route('dashboard.petugas.leave-requests.index') }}">
+                    <i class="ti ti-clipboard-check ps-2 text-2xl"></i> <span>Persetujuan Izin Siswa</span>
                 </a>
             </li>
         </ul>
