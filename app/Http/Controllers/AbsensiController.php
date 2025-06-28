@@ -38,13 +38,18 @@ class AbsensiController extends Controller
                 return back()->with('error', 'Siswa sudah absen hari ini.');
             }
 
-            // Simpan absensi
+            $now = now();
+            $batasTelat = $now->copy()->setTime(7, 0, 0);
+            $status = $now->greaterThan($batasTelat) ? 'telat' : 'hadir';
+
+            // dd(now());
+
             Attendance::create([
                 'student_id' => $student->id,
                 'user_id' => Auth::id(),
                 'school_class_id' => $student->school_class_id,
-                'tanggal' => now()->toDateString(),
-                'status' => 'hadir',
+                'tanggal' => $now->toDateString(),
+                'status' => $status,
                 'keterangan' => null,
             ]);
 
@@ -99,6 +104,11 @@ class AbsensiController extends Controller
 
         $today = Carbon::now()->toDateString();
         $now = Carbon::now();
+        // dd(now());
+
+        // Tentukan status hadir/telat
+        $batasTelat = $now->copy()->setTime(7, 0, 0);
+        $status = $now->greaterThan($batasTelat) ? 'telat' : 'hadir';
 
         // Cek apakah sudah absen hari ini
         $existingAttendance = Attendance::where('student_id', $studentId)
@@ -108,24 +118,23 @@ class AbsensiController extends Controller
         if ($existingAttendance) {
             // Update absensi yang sudah ada
             $existingAttendance->update([
-                'status' => 'hadir',
+                'status' => $status,
                 'time' => $now->format('H:i:s'),
             ]);
 
-            return redirect()->back()->with('success', 'Absensi berhasil diperbarui: ' . $student->name);
+            return redirect()->back()->with('success', 'Absensi berhasil diperbarui: ' . $student->nama);
         }
 
         // Buat absensi baru
         Attendance::create([
             'student_id' => $studentId,
-            'status' => 'hadir',
+            'status' => $status,
             'date' => $today,
             'time' => $now->format('H:i:s'),
         ]);
 
-        return redirect()->back()->with('success', 'Absensi berhasil dicatat: ' . $student->name);
+        return redirect()->back()->with('success', 'Absensi berhasil dicatat: ' . $student->nama);
     }
-
     public function rekapAbsen(Request $request)
     {
         // Ambil parameter dari request

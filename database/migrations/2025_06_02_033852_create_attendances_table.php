@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('school_class_id')->constrained('school_classes')->onDelete('cascade');
             $table->date('tanggal');
-            $table->enum('status', ['hadir', 'tidak hadir', 'izin', 'sakit'])->default('hadir');
+            $table->enum('status', ['hadir', 'tidak hadir', 'izin', 'sakit', 'telat'])->default('hadir');
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

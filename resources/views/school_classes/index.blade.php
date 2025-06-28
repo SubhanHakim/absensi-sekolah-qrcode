@@ -26,7 +26,6 @@
             <thead class="bg-blue-600 text-white sticky top-0 z-10">
                 <tr>
                     <th class="py-3 px-4 text-left font-semibold">Nama Kelas</th>
-                    <th class="py-3 px-4 text-left font-semibold">Wali Kelas</th>
                     <th class="py-3 px-4 text-center font-semibold">Aksi</th>
                 </tr>
             </thead>
@@ -34,7 +33,6 @@
                 @forelse ($kelases as $class)
                     <tr class="hover:bg-blue-50 even:bg-gray-50 transition">
                         <td class="py-2 px-4 border-b border-gray-200">{{ $class->class_name }}</td>
-                        <td class="py-2 px-4 border-b border-gray-200">{{ $class->waliKelas?->nama ?? '-' }}</td>
                         <td class="py-2 px-4 border-b border-gray-200 text-center">
                             <a href="{{ route('school_classes.edit', $class) }}"
                                 class="inline-block text-blue-600 hover:underline"><iconify-icon icon="mdi:pencil" width="24" height="24"></iconify-icon></a>
