@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\Attendance;
 use App\Models\Guru;
 use App\Models\Parents;
 use App\Models\SchoolClass;
@@ -26,12 +27,30 @@ class PetugasController extends Controller
             ->limit(5)
             ->get();
 
+        $totalAbsensi = Attendance::count();
+        $hadir = Attendance::where('status', 'hadir')->count();
+        $telat = Attendance::where('status', 'telat')->count();
+        $izin = Attendance::where('status', 'izin')->count();
+        $sakit = Attendance::where('status', 'sakit')->count();
+        $alpha = Attendance::where('status', 'tidak hadir')->count();
+
+        $persenHadir = $totalAbsensi ? round($hadir / $totalAbsensi * 100, 1) : 0;
+        $persenTelat = $totalAbsensi ? round($telat / $totalAbsensi * 100, 1) : 0;
+        $persenIzin = $totalAbsensi ? round($izin / $totalAbsensi * 100, 1) : 0;
+        $persenSakit = $totalAbsensi ? round($sakit / $totalAbsensi * 100, 1) : 0;
+        $persenAlpha = $totalAbsensi ? round($alpha / $totalAbsensi * 100, 1) : 0;
+
         return view('dashboard.petugas.index', compact(
             'kelas',
             'guru',
             'siswa',
             'orangtua',
-            'recentActivities'
+            'recentActivities',
+            'persenHadir',
+            'persenTelat',
+            'persenIzin',
+            'persenSakit',
+            'persenAlpha'
         ));
     }
     /**

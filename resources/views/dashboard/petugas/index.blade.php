@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-amber-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
@@ -77,28 +77,41 @@
         </div>
     </div>
 
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8 flex flex-col items-center">
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+            <i class="ti ti-chart-pie text-blue-600"></i> Diagram Presentase Absensi
+        </h3>
+        <div style="max-width: 320px; width: 100%;">
+            <canvas id="absensiChart" width="320" height="320" style="max-width:100%;height:auto;"></canvas>
+        </div>
+    </div>
+
     <!-- Quick Actions -->
     <div class="bg-white rounded-xl shadow-md p-6 mb-8">
         <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
             <i class="ti ti-bolt text-blue-600"></i> Aksi Cepat
         </h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <a href="{{ url('dashboard/school_classes') }}" class="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+            <a href="{{ url('dashboard/school_classes') }}"
+                class="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
                 <i class="ti ti-school text-3xl text-blue-600 mb-2"></i>
                 <span class="text-sm font-medium text-center">Kelola Kelas</span>
             </a>
-            
-            <a href="{{ url('dashboard/gurus') }}" class="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+
+            <a href="{{ url('dashboard/gurus') }}"
+                class="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
                 <i class="ti ti-user-star text-3xl text-green-600 mb-2"></i>
                 <span class="text-sm font-medium text-center">Kelola Guru</span>
             </a>
-            
-            <a href="{{ url('dashboard/students') }}" class="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
+
+            <a href="{{ url('dashboard/students') }}"
+                class="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
                 <i class="ti ti-users text-3xl text-purple-600 mb-2"></i>
                 <span class="text-sm font-medium text-center">Kelola Siswa</span>
             </a>
-            
-            <a href="{{ url('dashboard/orangtuas') }}" class="flex flex-col items-center p-4 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
+
+            <a href="{{ url('dashboard/orangtuas') }}"
+                class="flex flex-col items-center p-4 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
                 <i class="ti ti-user-circle text-3xl text-amber-600 mb-2"></i>
                 <span class="text-sm font-medium text-center">Kelola Orang Tua</span>
             </a>
@@ -107,32 +120,84 @@
 
     <!-- Recent Activity (Optional) -->
     <div class="bg-white rounded-xl shadow-md p-6">
-    <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
-        <i class="ti ti-activity text-blue-600"></i> Aktivitas Terbaru
-    </h3>
-    <div class="border rounded-lg overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktivitas</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse($recentActivities as $activity)
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+            <i class="ti ti-activity text-blue-600"></i> Aktivitas Terbaru
+        </h3>
+        <div class="border rounded-lg overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $activity->description }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $activity->user_name }} ({{ ucfirst($activity->user_role) }})</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $activity->created_at->format('H:i - d/m/Y') }}</td>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Aktivitas</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu
+                        </th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="px-6 py-4 text-center text-gray-500">Belum ada aktivitas terbaru</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($recentActivities as $activity)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $activity->description }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $activity->user_name }}
+                                ({{ ucfirst($activity->user_role) }})
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $activity->created_at->format('H:i - d/m/Y') }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-center text-gray-500">Belum ada aktivitas terbaru
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('absensiChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hadir', 'Telat', 'Izin', 'Sakit', 'Tidak Hadir'],
+                    datasets: [{
+                        data: [
+                            {{ $persenHadir }},
+                            {{ $persenTelat }},
+                            {{ $persenIzin }},
+                            {{ $persenSakit }},
+                            {{ $persenAlpha }}
+                        ],
+                        backgroundColor: [
+                            '#22c55e', // green
+                            '#eab308', // yellow
+                            '#3b82f6', // blue
+                            '#ef4444', // red
+                            '#6b7280' // gray
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    @endpush
 </x-app-layout>

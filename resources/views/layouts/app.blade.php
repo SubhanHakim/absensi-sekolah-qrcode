@@ -84,6 +84,7 @@
             </div>
         </div>
     </main>
+    @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="{{ asset('assets/js/sidebarmenu.js') }}"></script>
 </body>
