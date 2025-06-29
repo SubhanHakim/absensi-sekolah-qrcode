@@ -8,7 +8,9 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Imports\SiswaFullImport;
 use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Str;
 
@@ -130,6 +132,15 @@ class SiswaController extends Controller
     {
         $student->delete();
         return redirect()->route('students.index')->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv'
+        ]);
+        Excel::import(new SiswaFullImport, $request->file('file'));
+        return back()->with('success', 'Data siswa, kelas, dan orang tua berhasil diimport!');
     }
 
     public function downloadQr($id)

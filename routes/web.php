@@ -69,6 +69,8 @@ Route::middleware(['auth', 'role:petugas'])->prefix('dashboard')->group(function
     Route::resource('students', SiswaController::class);
     Route::resource('orangtuas', OrangTuaController::class);
 
+    Route::post('/siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
+
     // Feature scan absen - PERBAIKAN PATH
     Route::get('petugas/scan-absen', [AbsensiController::class, 'scanAbsen'])
         ->name('dashboard.petugas.scan-absen');

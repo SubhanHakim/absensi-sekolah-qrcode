@@ -13,11 +13,24 @@
         <div class="bg-green-100 text-green-700 p-2 rounded mb-4">{{ session('success') }}</div>
     @endif
     <div class="flex justify-between items-center mb-4">
+
         <a href="{{ route('students.create') }}"
             class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition flex items-center gap-2">
             <iconify-icon icon="mdi:account-plus" width="22" height="22"></iconify-icon>
             Tambah Siswa
         </a>
+
+        <form action="{{ route('siswa.import') }}" method="POST" enctype="multipart/form-data"
+            class="flex items-center gap-2">
+            @csrf
+            <label
+                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow cursor-pointer transition flex items-center gap-2 mb-0">
+                <iconify-icon icon="mdi:upload" width="22" height="22"></iconify-icon>
+                <span>Upload Siswa</span>
+                <input type="file" name="file" accept=".csv,.xlsx" class="hidden" onchange="this.form.submit()"
+                    required>
+            </label>
+        </form>
     </div>
     <div class="overflow-x-auto rounded shadow">
         <table class="min-w-full bg-white border border-gray-200 rounded-lg">
@@ -39,7 +52,11 @@
                             {{ $student->schoolClass->class_name ?? $student->kelas }}</td>
                         <td class="py-2 px-4 border-b border-gray-200">
                             <div id="qr-container-{{ $student->id }}" class="flex flex-col items-center">
-                                {!! QrCode::size(100)->generate($student->qr_code) !!}
+                                @if ($student->qr_code)
+                                    {!! QrCode::size(100)->generate($student->qr_code) !!}
+                                @else
+                                    <span class="text-red-500 text-xs">QR Code belum tersedia</span>
+                                @endif
                                 <a href="#"
                                     class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs mt-2 transition flex items-center gap-1"
                                     onclick="downloadPNG({{ $student->id }}, '{{ $student->nis }}'); return false;">

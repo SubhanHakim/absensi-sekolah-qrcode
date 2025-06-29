@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('parents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->unsignedBigInteger('student_id')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('email')->unique();
             $table->string('nama');
