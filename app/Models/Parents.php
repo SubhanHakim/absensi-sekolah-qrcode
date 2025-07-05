@@ -12,6 +12,7 @@ class Parents extends Model
         'no_hp',
         'student_id',
         'user_id',
+        'alamat',
     ];
 
     public function user()

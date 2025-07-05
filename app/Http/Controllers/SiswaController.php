@@ -48,6 +48,7 @@ class SiswaController extends Controller
             'nama_orangtua' => 'required',
             'email_orangtua' => 'required|email|unique:parents,email',
             'no_hp_orangtua' => 'required',
+            'alamat' => 'required|string|max:255',
         ]);
 
         $qrCodeValue = $request->nis;
@@ -69,6 +70,7 @@ class SiswaController extends Controller
             'user_id' => null, // atau isi jika ada
             'no_hp' => $request->no_hp_orangtua,
             'student_id' => $student->id,
+            'alamat' => $request->alamat,
         ]);
 
         return redirect()->route('students.index')->with('success', 'Siswa & Orang Tua berhasil ditambahkan.');
@@ -98,6 +100,7 @@ class SiswaController extends Controller
             'nama_orangtua' => 'required',
             'email_orangtua' => 'required|email|unique:parents,email,' . ($parent->id ?? 'NULL'),
             'no_hp_orangtua' => 'required',
+            'alamat' => 'required|string|max:255',
         ]);
 
         // Update siswa
@@ -123,6 +126,7 @@ class SiswaController extends Controller
                 'no_hp' => $request->no_hp_orangtua,
                 'student_id' => $student->id,
                 'user_id' => null,
+                'alamat' => $request->alamat,
             ]);
         }
 

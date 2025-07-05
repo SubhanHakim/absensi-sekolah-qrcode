@@ -1,5 +1,5 @@
 <x-app-layout>
-     <x-slot name="header">
+    <x-slot name="header">
         <nav class="w-full flex items-center justify-between" aria-label="Global">
             <div>
                 <h2 class="font-semibold text-xl">Tambah Siswa dan Orang Tua</h2>
@@ -30,19 +30,23 @@
                 <h3 class="text-lg font-semibold mb-2">Data Siswa</h3>
                 <div class="mb-4">
                     <label class="block mb-1 font-medium text-gray-700" for="nama_siswa">Nama Siswa</label>
-                    <input type="text" id="nama_siswa" name="nama_siswa" class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                    <input type="text" id="nama_siswa" name="nama_siswa"
+                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
                 </div>
                 <div class="mb-4">
                     <label class="block mb-1 font-medium text-gray-700" for="nis">NIS</label>
-                    <input type="text" id="nis" name="nis" class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                    <input type="text" id="nis" name="nis"
+                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
                 </div>
                 <div class="mb-4">
                     <label class="block mb-1 font-medium text-gray-700" for="email">Email Siswa</label>
-                    <input type="email" id="email" name="email" class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                    <input type="email" id="email" name="email"
+                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
                 </div>
                 <div class="mb-4">
                     <label class="block mb-1 font-medium text-gray-700" for="school_class_id">Kelas</label>
-                    <select id="school_class_id" name="school_class_id" class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                    <select id="school_class_id" name="school_class_id"
+                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
                         <option value="">Pilih Kelas</option>
                         @foreach ($schoolClass as $class)
                             <option value="{{ $class->id }}">{{ $class->class_name }}</option>
@@ -53,19 +57,28 @@
                 <h3 class="text-lg font-semibold mb-2 mt-6">Data Orang Tua</h3>
                 <div class="mb-4">
                     <label class="block mb-1 font-medium text-gray-700" for="nama_orangtua">Nama Orang Tua</label>
-                    <input type="text" id="nama_orangtua" name="nama_orangtua" class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                    <input type="text" id="nama_orangtua" name="nama_orangtua"
+                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
                 </div>
                 <div class="mb-4">
                     <label class="block mb-1 font-medium text-gray-700" for="email_orangtua">Email Orang Tua</label>
-                    <input type="email" id="email_orangtua" name="email_orangtua" class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                    <input type="email" id="email_orangtua" name="email_orangtua"
+                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
                 </div>
                 <div class="mb-6">
                     <label class="block mb-1 font-medium text-gray-700" for="no_hp_orangtua">No HP Orang Tua</label>
-                    <input type="text" id="no_hp_orangtua" name="no_hp_orangtua" class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                    <input type="text" id="no_hp_orangtua" name="no_hp_orangtua"
+                        class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
+                </div>
+                <div class="mb-6">
+                    <label for="alamat" class="block mb-1 font-medium text-gray-700" for="no_hp_orangtua">Alamat</label>
+                    <textarea name="alamat" id="alamat" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Simpan</button>
-                <a href="{{ route('students.index') }}" class="block text-center mt-3 text-gray-600 hover:underline">Batal</a>
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Simpan</button>
+                <a href="{{ route('students.index') }}"
+                    class="block text-center mt-3 text-gray-600 hover:underline">Batal</a>
             </form>
         </div>
     </div>

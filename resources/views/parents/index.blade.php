@@ -36,6 +36,8 @@
                         </th>
                         <th class="py-3 px-4 text-left text-xs font-medium text-white uppercase tracking-wider">Anak
                         </th>
+                        <th class="py-3 px-4 text-left text-xs font-medium text-white uppercase tracking-wider">Alamat
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -76,6 +78,17 @@
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                         {{ $orangtua->student->nama }}
                                     </span>
+                                @else
+                                    <span class="text-gray-900 text-sm">Tidak ada</span>
+                                @endif
+                            </td>
+                            <td class="py-3 px-4 whitespace-nowrap">
+                                @if ($orangtua->alamat)
+                                    <div class="flex items-center gap-2">
+                                        <i class="ti ti-map-pin text-gray-900"></i>
+                                        <span
+                                            class="text-gray-900 text-sm">{{ Str::limit($orangtua->alamat, 30) }}</span>
+                                    </div>
                                 @else
                                     <span class="text-gray-900 text-sm">Tidak ada</span>
                                 @endif

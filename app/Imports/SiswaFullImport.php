@@ -21,6 +21,7 @@ class SiswaFullImport implements ToModel
             'nama'   => $row[4],
             'email'  => $row[5],
             'no_hp'  => $row[6],
+            'alamat' => $row[7],
         ]);
 
         // 3. Insert siswa, hubungkan ke kelas dan orang tua
