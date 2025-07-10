@@ -69,6 +69,10 @@
                         value="{{ old('email_orangtua', $parent->email ?? '') }}"
                         class="w-full border rounded px-3 py-2 focus:ring focus:border-blue-400" required>
                 </div>
+                 <div class="mb-6">
+                    <label for="alamat" class="block mb-1 font-medium text-gray-700" for="no_hp_orangtua">Alamat</label>
+                    <textarea name="alamat" id="alamat" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                </div>
                 <div class="mb-6">
                     <label class="block mb-1 font-medium text-gray-700">No HP Orang Tua</label>
                     <input type="text" name="no_hp_orangtua"
