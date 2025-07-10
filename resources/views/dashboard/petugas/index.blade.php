@@ -40,18 +40,6 @@
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500 hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-500 text-sm font-medium mb-1">Total Guru</div>
-                    <div class="text-3xl font-bold text-gray-800">{{ $guru }}</div>
-                </div>
-                <div class="bg-green-100 p-3 rounded-lg">
-                    <i class="ti ti-user-star text-2xl text-green-600"></i>
-                </div>
-            </div>
-        </div>
-
         <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
@@ -91,29 +79,23 @@
         <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
             <i class="ti ti-bolt text-blue-600"></i> Aksi Cepat
         </h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <a href="{{ url('dashboard/school_classes') }}"
-                class="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
-                <i class="ti ti-school text-3xl text-blue-600 mb-2"></i>
-                <span class="text-sm font-medium text-center">Kelola Kelas</span>
-            </a>
-
-            <a href="{{ url('dashboard/gurus') }}"
-                class="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
-                <i class="ti ti-user-star text-3xl text-green-600 mb-2"></i>
-                <span class="text-sm font-medium text-center">Kelola Guru</span>
+                class="flex flex-col items-center p-6 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors shadow-sm hover:shadow-md">
+                <i class="ti ti-school text-4xl text-blue-600 mb-3"></i>
+                <span class="text-sm font-medium text-center text-gray-700">Kelola Kelas</span>
             </a>
 
             <a href="{{ url('dashboard/students') }}"
-                class="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
-                <i class="ti ti-users text-3xl text-purple-600 mb-2"></i>
-                <span class="text-sm font-medium text-center">Kelola Siswa</span>
+                class="flex flex-col items-center p-6 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors shadow-sm hover:shadow-md">
+                <i class="ti ti-users text-4xl text-purple-600 mb-3"></i>
+                <span class="text-sm font-medium text-center text-gray-700">Kelola Siswa</span>
             </a>
 
             <a href="{{ url('dashboard/orangtuas') }}"
-                class="flex flex-col items-center p-4 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
-                <i class="ti ti-user-circle text-3xl text-amber-600 mb-2"></i>
-                <span class="text-sm font-medium text-center">Kelola Orang Tua</span>
+                class="flex flex-col items-center p-6 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors shadow-sm hover:shadow-md">
+                <i class="ti ti-user-circle text-4xl text-amber-600 mb-3"></i>
+                <span class="text-sm font-medium text-center text-gray-700">Kelola Orang Tua</span>
             </a>
         </div>
     </div>
