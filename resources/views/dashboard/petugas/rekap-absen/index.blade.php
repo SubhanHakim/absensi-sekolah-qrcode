@@ -20,13 +20,6 @@
                 <label for="tanggal" class="font-semibold">Tanggal:</label>
                 <input type="date" id="tanggal" name="tanggal" value="{{ request('tanggal', $tanggal) }}" class="border rounded px-2 py-1">
                 <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Lihat</button>
-
-                <label for="periode" class="ml-4 font-semibold">Periode:</label>
-                <select name="periode" id="periode" class="border rounded px-2 py-1">
-                    <option value="harian" {{ request('periode', $periode) == 'harian' ? 'selected' : '' }}>Harian</option>
-                    <option value="mingguan" {{ request('periode', $periode) == 'mingguan' ? 'selected' : '' }}>Mingguan</option>
-                    <option value="bulanan" {{ request('periode', $periode) == 'bulanan' ? 'selected' : '' }}>Bulanan</option>
-                </select>
             </form>
 
             <h3 class="text-lg font-semibold text-blue-700 mb-2">

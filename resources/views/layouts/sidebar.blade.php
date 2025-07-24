@@ -20,25 +20,52 @@
                 </a>
             </li>
 
-            <li class="text-xs font-bold mb-4 mt-6">
-                <i class="ti ti-dots nav-small-cap-icon text-lg hidden text-center"></i>
-                <span class="text-xs text-gray-400 font-semibold">MANAJEMEN</span>
+                        <!-- Dropdown Master Data -->
+            <li class="sidebar-item has-dropdown">
+                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full cursor-pointer
+                {{ request()->is('dashboard/students*') || request()->is('dashboard/school_classes*') || request()->is('dashboard/orangtuas*') || request()->is('dashboard/accounts*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                    onclick="toggleDropdown(this)">
+                    <i class="ti ti-database ps-2 text-2xl"></i> 
+                    <span class="flex-1">Master Data</span>
+                    <i class="ti ti-chevron-down dropdown-arrow transition-transform duration-200"></i>
+                </a>
+                <ul class="dropdown-menu ml-8 mt-1 space-y-1 max-h-0 overflow-hidden transition-all duration-300">
+                    <li>
+                        <a class="sidebar-link gap-3 py-2 my-1 text-sm flex items-center relative rounded-md w-full
+                        {{ request()->is('dashboard/students*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                            href="{{ url('dashboard/students') }}">
+                            <iconify-icon icon="mdi:account-school" class="ps-2 text-xl"></iconify-icon> <span>Data Siswa</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="sidebar-link gap-3 py-2 my-1 text-sm flex items-center relative rounded-md w-full
+                        {{ request()->is('dashboard/school_classes*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                            href="{{ url('dashboard/school_classes') }}">
+                            <iconify-icon icon="mdi:school" class="ps-2 text-xl"></iconify-icon> <span>Data Kelas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="sidebar-link gap-3 py-2 my-1 text-sm flex items-center relative rounded-md w-full
+                        {{ request()->is('dashboard/orangtuas*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                            href="{{ url('dashboard/orangtuas') }}">
+                            <iconify-icon icon="mdi:account-supervisor" class="ps-2 text-xl"></iconify-icon> <span>Data Orang Tua</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="sidebar-link gap-3 py-2 my-1 text-sm flex items-center relative rounded-md w-full
+                        {{ request()->is('dashboard/accounts*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
+                            href="{{ url('dashboard/accounts') }}">
+                            <i class="ti ti-user-cog ps-2 text-xl"></i> <span>Manajemen Akun</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
-            <li class="sidebar-item">
-                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/school_classes*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="{{ url('dashboard/school_classes') }}">
-                    <iconify-icon icon="mdi:school" class="ps-2 text-2xl"></iconify-icon> <span>Data Kelas</span>
-                </a>
+            <li class="text-xs font-bold mb-4 mt-6">
+                <i class="ti ti-dots nav-small-cap-icon text-lg hidden text-center"></i>
+                <span class="text-xs text-gray-400 font-semibold">ABSENSI</span>
             </li>
-            {{-- <li class="sidebar-item">
-                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/gurus*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="{{ url('dashboard/gurus') }}">
-                    <iconify-icon icon="mdi:account-tie" class="ps-2 text-2xl"></iconify-icon> <span>Data Guru</span>
-                </a>
-            </li> --}}
+
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
         {{ request()->is('dashboard/petugas/scan-absen*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
@@ -55,36 +82,40 @@
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/students*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="{{ url('dashboard/students') }}">
-                    <iconify-icon icon="mdi:account-school" class="ps-2 text-2xl"></iconify-icon> <span>Data
-                        Siswa</span>
-                </a>
-            </li>
-
-            <li class="sidebar-item">
-                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/orangtuas*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="{{ url('dashboard/orangtuas') }}">
-                    <iconify-icon icon="mdi:account-supervisor" class="ps-2 text-2xl"></iconify-icon> <span>Data Orang
-                        Tua</span>
-                </a>
-            </li>
-
-            <li class="sidebar-item">
-                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
-        {{ request()->is('dashboard/accounts*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
-                    href="{{ url('dashboard/accounts') }}">
-                    <i class="ti ti-user-cog ps-2 text-2xl"></i> <span>Manajemen Akun</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md w-full
 {{ request()->is('dashboard/petugas/leave-requests*') ? 'bg-blue-100 text-blue-700' : 'text-gray-500' }}"
                     href="{{ route('dashboard.petugas.leave-requests.index') }}">
                     <i class="ti ti-clipboard-check ps-2 text-2xl"></i> <span>Persetujuan Izin Siswa</span>
                 </a>
             </li>
+
         </ul>
     </nav>
 </div>
+
+<script>
+function toggleDropdown(element) {
+    const dropdownMenu = element.nextElementSibling;
+    const arrow = element.querySelector('.dropdown-arrow');
+    
+    if (dropdownMenu.style.maxHeight === '0px' || dropdownMenu.style.maxHeight === '') {
+        dropdownMenu.style.maxHeight = dropdownMenu.scrollHeight + 'px';
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        dropdownMenu.style.maxHeight = '0px';
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+// Auto expand dropdown jika ada submenu yang aktif
+document.addEventListener('DOMContentLoaded', function() {
+    const activeDropdown = document.querySelector('.has-dropdown .dropdown-menu a.bg-blue-100');
+    if (activeDropdown) {
+        const dropdown = activeDropdown.closest('.dropdown-menu');
+        const parentLink = dropdown.previousElementSibling;
+        const arrow = parentLink.querySelector('.dropdown-arrow');
+        
+        dropdown.style.maxHeight = dropdown.scrollHeight + 'px';
+        arrow.style.transform = 'rotate(180deg)';
+    }
+});
+</script>

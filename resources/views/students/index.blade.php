@@ -21,16 +21,20 @@
         </a>
 
         <form action="{{ route('siswa.import') }}" method="POST" enctype="multipart/form-data"
-            class="flex items-center gap-2">
-            @csrf
-            <label
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow cursor-pointer transition flex items-center gap-2 mb-0">
-                <iconify-icon icon="mdi:upload" width="22" height="22"></iconify-icon>
-                <span>Upload Siswa</span>
-                <input type="file" name="file" accept=".csv,.xlsx" class="hidden" onchange="this.form.submit()"
-                    required>
-            </label>
-        </form>
+    class="flex flex-col items-end gap-2">
+    @csrf
+    <label
+        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow cursor-pointer transition flex items-center gap-2 mb-0">
+        <iconify-icon icon="mdi:upload" width="22" height="22"></iconify-icon>
+        <span>Upload Siswa</span>
+        <input type="file" name="file" accept=".csv,.xlsx" class="hidden" onchange="this.form.submit()"
+            required>
+    </label>
+    <div class="text-xs text-gray-500 flex items-center gap-1">
+        <iconify-icon icon="mdi:information-outline" width="14" height="14"></iconify-icon>
+        <span>Format: Excel (.xlsx) atau CSV (.csv)</span>
+    </div>
+</form>
     </div>
     <div class="overflow-x-auto rounded shadow">
         <table class="min-w-full bg-white border border-gray-200 rounded-lg">
