@@ -137,10 +137,16 @@ class AbsensiController extends Controller
     }
     public function rekapAbsen(Request $request)
     {
-        // Ambil parameter dari request
-        $tanggal = $request->input('tanggal', now()->toDateString());
+        // Ambil parameter dari request - ubah untuk range tanggal
+        $tanggalDari = $request->input('tanggal_dari', now()->toDateString());
+        $tanggalSampai = $request->input('tanggal_sampai', now()->toDateString());
         $periode = $request->input('periode', 'harian');
         $kelasId = $request->input('kelas_id');
+
+        // Validasi tanggal
+        if ($tanggalDari > $tanggalSampai) {
+            return back()->withErrors(['tanggal' => 'Tanggal dari tidak boleh lebih besar dari tanggal sampai']);
+        }
 
         // Dapatkan data kelas
         $classes = SchoolClass::all();
@@ -179,19 +185,11 @@ class AbsensiController extends Controller
         // Siapkan data absensi sesuai periode
         $absensi = [];
 
-        // Tentukan range tanggal berdasarkan periode
-        $startDate = Carbon::parse($tanggal);
-        $endDate = Carbon::parse($tanggal);
+        // Gunakan range tanggal yang dipilih user
+        $startDate = Carbon::parse($tanggalDari);
+        $endDate = Carbon::parse($tanggalSampai);
 
-        if ($periode === 'mingguan') {
-            $startDate = $startDate->startOfWeek();
-            $endDate = $endDate->endOfWeek();
-        } elseif ($periode === 'bulanan') {
-            $startDate = $startDate->startOfMonth();
-            $endDate = $endDate->endOfMonth();
-        }
-
-        // Ambil data absensi untuk setiap siswa
+        // Ambil data absensi untuk setiap siswa dalam range tanggal
         foreach ($rawStudents as $student) {
             $attendances = Attendance::where('student_id', $student->id)
                 ->whereBetween('tanggal', [$startDate->toDateString(), $endDate->toDateString()])
@@ -209,11 +207,16 @@ class AbsensiController extends Controller
             $absensi[$student->id] = $transformedAttendances;
         }
 
+        // Untuk kompatibilitas dengan view yang ada, set tanggal ke tanggalDari
+        $tanggal = $tanggalDari;
+
         return view('dashboard.petugas.rekap-absen', compact(
             'classes',
             'kelas',
             'students',
             'tanggal',
+            'tanggalDari',
+            'tanggalSampai',
             'periode',
             'absensi'
         ));
