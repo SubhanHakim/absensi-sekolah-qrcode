@@ -1,0 +1,207 @@
+<x-app-layout>
+    <x-slot name="header">
+        <nav class="w-full flex items-center justify-between py-2" aria-label="Global">
+            <!-- Left Side -->
+            <div class="flex items-center gap-4">
+                <!-- Mobile Toggle Menu -->
+                <div class="relative xl:hidden">
+                    <button 
+                        id="mobile-toggle"
+                        class="text-xl cursor-pointer text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-colors"
+                        aria-label="Toggle navigation">
+                        <i class="ti ti-menu-2 text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Page Title and Breadcrumb -->
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Dashboard Wali Kelas</h1>
+                    <div class="text-sm text-gray-500 flex items-center">
+                        <a href="/dashboard" class="hover:text-blue-600 transition-colors">Home</a>
+                        <span class="mx-2">/</span>
+                        <span class="text-gray-700">Dashboard</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side -->
+            <div class="flex items-center gap-4">
+                <!-- Profile Dropdown -->
+                @include('header-components.dd-profile')
+            </div>
+        </nav>
+    </x-slot>
+
+    <!-- Welcome Banner -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-400 text-white rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex items-center gap-4">
+            <div class="bg-white bg-opacity-20 p-3 rounded-full flex items-center justify-center w-12 h-12">
+                @php
+                    $initial = strtoupper(substr(auth()->user()->name ?? 'A', 0, 1));
+                @endphp
+                <span class="text-black text-2xl font-bold">{{ $initial }}</span>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold">Selamat Datang, {{ auth()->user()->name }}!</h3>
+                <p class="text-blue-50">Dashboard Sistem Absensi Sekolah</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-500 text-sm font-medium mb-1">Total Kelas</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ $kelas }}</div>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <i class="ti ti-school text-2xl text-blue-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-500 text-sm font-medium mb-1">Total Siswa</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ $siswa }}</div>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-lg">
+                    <i class="ti ti-users text-2xl text-purple-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-amber-500 hover:shadow-lg transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-500 text-sm font-medium mb-1">Total Orang Tua</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ $orangtua }}</div>
+                </div>
+                <div class="bg-amber-100 p-3 rounded-lg">
+                    <i class="ti ti-user-circle text-2xl text-amber-600"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8 flex flex-col items-center">
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+            <i class="ti ti-chart-pie text-blue-600"></i> Diagram Presentase Absensi
+        </h3>
+        <div style="max-width: 320px; width: 100%;">
+            <canvas id="absensiChart" width="320" height="320" style="max-width:100%;height:auto;"></canvas>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+            <i class="ti ti-bolt text-blue-600"></i> Aksi Cepat
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <a href="{{ url('dashboard/school_classes') }}"
+                class="flex flex-col items-center p-6 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors shadow-sm hover:shadow-md">
+                <i class="ti ti-school text-4xl text-blue-600 mb-3"></i>
+                <span class="text-sm font-medium text-center text-gray-700">Kelola Kelas</span>
+            </a>
+
+            <a href="{{ url('dashboard/students') }}"
+                class="flex flex-col items-center p-6 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors shadow-sm hover:shadow-md">
+                <i class="ti ti-users text-4xl text-purple-600 mb-3"></i>
+                <span class="text-sm font-medium text-center text-gray-700">Kelola Siswa</span>
+            </a>
+
+            <a href="{{ url('dashboard/orangtuas') }}"
+                class="flex flex-col items-center p-6 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors shadow-sm hover:shadow-md">
+                <i class="ti ti-user-circle text-4xl text-amber-600 mb-3"></i>
+                <span class="text-sm font-medium text-center text-gray-700">Kelola Orang Tua</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Activity (Optional) -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+            <i class="ti ti-activity text-blue-600"></i> Aktivitas Terbaru
+        </h3>
+        <div class="border rounded-lg overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Aktivitas</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($recentActivities as $activity)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $activity->description }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $activity->user_name }}
+                                ({{ ucfirst($activity->user_role) }})
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $activity->created_at->format('H:i - d/m/Y') }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-center text-gray-500">Belum ada aktivitas terbaru
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('absensiChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hadir', 'Telat', 'Izin', 'Sakit', 'Tidak Hadir'],
+                    datasets: [{
+                        data: [
+                            {{ $persenHadir }},
+                            {{ $persenTelat }},
+                            {{ $persenIzin }},
+                            {{ $persenSakit }},
+                            {{ $persenAlpha }}
+                        ],
+                        backgroundColor: [
+                            '#22c55e', // green
+                            '#eab308', // yellow
+                            '#3b82f6', // blue
+                            '#ef4444', // red
+                            '#6b7280' // gray
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    @endpush
+</x-app-layout>
